@@ -1,0 +1,37 @@
+====================================
+Install MongoDB Enterprise on Debian
+====================================
+
+.. default-domain:: mongodb
+
+Overview
+--------
+
+Use this tutorial to install MongoDB Enterprise on Debian Linux systems from
+``.deb`` packages.
+
+.. include:: /includes/list-mongodb-enterprise-packages.rst
+
+Considerations
+--------------
+
+.. include:: /includes/note-package-change.rst
+
+MongoDB only provides Enterprise packages for 64-bit versions of Debian Wheezy.
+
+.. this is actually missing - builds only exist for 2.4 and 2.7 releases. FIX
+
+Install MongoDB Enterprise
+--------------------------
+
+.. include:: /includes/steps/install-mongodb-enterprise-on-debian.rst
+
+Run MongoDB Enterprise
+----------------------
+
+.. |mongod-user| replace:: ``mongodb``
+.. |mongod-datadir| replace:: ``/var/lib/mongodb``
+
+.. include:: /includes/fact-installation-directories.rst
+
+.. include:: /includes/steps/run-mongodb-on-debian.rst

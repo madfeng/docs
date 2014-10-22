@@ -197,8 +197,8 @@ storage utilization for these collections:
 
      { last_name : "Smith", best_score: 3.9 }
 
-  If you shorten the filed named ``last_name`` to ``lname`` and the
-  field name ``best_score`` to ``score``, as follows, you could save 9
+  If you shorten the field named ``last_name`` to ``lname`` and the
+  field named ``best_score`` to ``score``, as follows, you could save 9
   bytes per document.
 
   .. code-block:: javascript
@@ -206,8 +206,8 @@ storage utilization for these collections:
      { lname : "Smith", score : 3.9 }
 
   Shortening field names reduces expressiveness and does not provide
-  considerable benefit on for larger documents and where document
-  overhead is not significant concern. Shorter field names do not
+  considerable benefit for larger documents and where document
+  overhead is not of significant concern. Shorter field names do not
   reduce the size of indexes, because indexes have a predefined
   structure.
 
@@ -495,59 +495,78 @@ apply:
 How do I query for fields that have null values?
 ------------------------------------------------
 
-Fields in a document may store ``null`` values, as in a notional
-collection, ``test``, with the following documents:
+Different query operators treat ``null`` values differently.
+
+Consider the collection ``test`` with the following documents:
 
 .. code-block:: javascript
 
    { _id: 1, cancelDate: null }
    { _id: 2 }
 
-Different query operators treat ``null`` values differently:
+.. _faq-comparison-with-null:
 
-- The ``{ cancelDate : null }`` query matches documents that either
-  contains the ``cancelDate`` field whose value is ``null`` *or* that
-  do not contain the ``cancelDate`` field:
+Comparison with Null
+~~~~~~~~~~~~~~~~~~~~
 
-  .. code-block:: javascript
+The ``{ cancelDate : null }`` query matches documents that either
+contain the ``cancelDate`` field whose value is ``null`` *or* that
+do not contain the ``cancelDate`` field. If the queried index is
+:ref:`sparse <index-type-sparse>`, however, then the query will only match
+``null`` values, not missing fields.
 
-     db.test.find( { cancelDate: null } )
+.. versionchanged:: 2.6
+   If using the sparse index results in an incomplete result, MongoDB will not
+   use the index unless a :method:`~cursor.hint()` explicitly specifies the
+   index. See :ref:`index-type-sparse` for more information.
 
-  The query returns both documents:
+Given the following query:
 
-  .. code-block:: javascript
+.. code-block:: javascript
 
-     { "_id" : 1, "cancelDate" : null }
-     { "_id" : 2 }
+   db.test.find( { cancelDate: null } )
 
-- The ``{ cancelDate : { $type: 10 } }`` query matches documents that
-  contains the ``cancelDate`` field whose value is ``null`` *only*;
-  i.e. the value of the ``cancelDate`` field is of BSON Type ``Null``
-  (i.e. ``10``) :
+The query returns both documents:
 
-  .. code-block:: javascript
+.. code-block:: javascript
 
-     db.test.find( { cancelDate : { $type: 10 } } )
+   { "_id" : 1, "cancelDate" : null }
+   { "_id" : 2 }
 
-  The query returns only the document that contains the ``null`` value:
+Type Check
+~~~~~~~~~~
 
-  .. code-block:: javascript
+The ``{ cancelDate : { $type: 10 } }`` query matches documents that
+contains the ``cancelDate`` field whose value is ``null`` *only*;
+i.e. the value of the ``cancelDate`` field is of BSON Type ``Null``
+(i.e. ``10``) :
 
-     { "_id" : 1, "cancelDate" : null }
+.. code-block:: javascript
 
-- The ``{ cancelDate : { $exists: false } }`` query matches documents
-  that do not contain the ``cancelDate`` field:
+   db.test.find( { cancelDate : { $type: 10 } } )
 
-  .. code-block:: javascript
+The query returns only the document that contains the ``null`` value:
 
-     db.test.find( { cancelDate : { $exists: false } } )
+.. code-block:: javascript
 
-  The query returns only the document that does *not* contain the
-  ``cancelDate`` field:
+   { "_id" : 1, "cancelDate" : null }
 
-  .. code-block:: javascript
+Existence Check
+~~~~~~~~~~~~~~~
 
-     { "_id" : 2 }
+The ``{ cancelDate : { $exists: false } }`` query matches documents
+that do not contain the ``cancelDate`` field:
+
+.. code-block:: javascript
+
+   db.test.find( { cancelDate : { $exists: false } } )
+
+The query returns only the document that does *not* contain the
+``cancelDate`` field:
+
+.. code-block:: javascript
+
+   { "_id" : 2 }
 
 .. seealso:: The reference documentation for the :query:`$type` and
    :query:`$exists` operators.
@@ -705,7 +724,7 @@ additional examples:
 
 .. `Document Design for MongoDB <http://oreilly.com/catalog/0636920018391>`_
 
-- `Schema Design by Example <http://www.10gen.com/presentations/mongodb-melbourne-2012/schema-design-example>`_
+- `Schema Design by Example <http://www.mongodb.com/presentations/mongodb-melbourne-2012/schema-design-example>`_
 
 - `Dynamic Schema Blog Post
   <http://dmerr.tumblr.com/post/6633338010/schemaless>`_
@@ -731,7 +750,7 @@ size. To *minimize* document movements, MongoDB uses
 :term:`padding`.
 
 You should not have to pad manually because MongoDB adds
-:ref:`padding automatically <record-allocation-stratgies>` and can
+:ref:`padding automatically <record-allocation-strategies>` and can
 adaptively adjust the amount of padding added to documents to prevent
 document relocations following updates.
 You can change the default :data:`~collStats.paddingFactor`
@@ -769,4 +788,4 @@ as in the following example.
 
 .. seealso::
 
-   :ref:`record-allocation-stratgies`
+   :ref:`record-allocation-strategies`

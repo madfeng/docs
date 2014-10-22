@@ -3662,6 +3662,29 @@ code: 301
 outputs:
   - 'before-v2.4'
 ---
+from: '/tutorial/configure-x509-client-authentication'
+to: '/tutorial/enable-authentication'
+type: 'redirect'
+code: 301
+outputs:
+  - 'before-v2.4'
+---
+from: '/tutorial/configure-x509-member-authentication'
+to: '/tutorial/enable-authentication'
+type: 'redirect'
+code: 301
+outputs:
+  - 'before-v2.4'
+---
+from: '/tutorial/configure-x509'
+to: '/tutorial/configure-x509-client-authentication'
+type: 'redirect'
+code: 301
+outputs:
+  - 'after-v2.4'
+  - 'master'
+  - 'manual'
+---
 from: '/core/auditing'
 to: '/core/security'
 type: 'redirect'
@@ -4728,9 +4751,104 @@ outputs:
   - 'before-v2.4'
 ---
 from: '/reference/built-in-roles'
-to: 'l/tutorial/enable-authentication'
+to: '/tutorial/enable-authentication'
 type: 'redirect'
 code: 301
 outputs:
   - 'before-v2.4'
+---
+from: '/tutorial/verify-mongodb-packages'
+to: '/installation'
+type: 'redirect'
+code: 301
+outputs:
+  - 'before-v2.4'
+---
+from: '/tutorial/modify-an-index'
+to: '/administration/indexes-management'
+type: 'redirect'
+code: 301
+outputs:
+  - 'before-v2.4'
+---
+from: '/tutorial/install-mongodb-enterprise-on-debian'
+to: '/installation'
+type: 'redirect'
+code: 301
+outputs:
+  - 'before-v2.4'
+---
+from: '/tutorial/model-monetary-data'
+to: '/applications/data-models-applications'
+type: 'redirect'
+code: 301
+outputs:
+  - 'before-v2.4'
+---
+from: '/tutorial/configure-fips'
+to: '/tutorial/configure-ssl'
+type: 'redirect'
+code: 301
+outputs:
+  - 'before-v2.4'
+---
+from: '/reference/operator/query/minDistance'
+to: '/reference/operator/query-geospatial'
+type: 'redirect'
+code: 301
+outputs:
+  - 'before-v2.4'
+---
+from: '/reference/method/db.getCmdLineOpts'
+to: '/reference/method/js-database'
+type: 'redirect'
+code: 301
+outputs:
+  - 'before-v2.4'
+---
+from: /tutorial/install-mongodb-enterprise-on-debian
+to: /tutorial/install-mongodb-enterprise
+code: 303
+type: redirect
+outputs:
+  - master
+  - manual
+---
+from: /tutorial/install-mongodb-enterprise-on-suse
+to: /tutorial/install-mongodb-enterprise
+code: 303
+type: redirect
+outputs:
+  - master
+  - manual
+---
+from: /tutorial/model-time-data
+to: /applications/data-models-applications
+code: 303
+type: redirect
+outputs:
+  - 'before-v2.4'
+---
+from: /core/multikey-index-bounds
+to: /core/indexes/
+code: 303
+type: redirect
+outputs:
+  - 'before-v2.4'
+---
+from: /core/bulk-write-operations
+to: /core/bulk-inserts
+code: 303
+type: redirect
+outputs:
+  - 'before-v2.4'
+---
+from: /core/bulk-inserts
+to: /core/bulk-write-operations
+code: 303
+type: redirect
+outputs:
+  - 'after-v2.4'
+  - 'master'
+  - 'manual'
 ...

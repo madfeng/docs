@@ -7,6 +7,7 @@
 #
 program: mongod
 name: help
+aliases: -h
 inherit:
   name: help
   program: _shared
@@ -62,12 +63,12 @@ name: bind_ip
 args: <ip address>
 default: |
   All interfaces.
-
+directive: option
+description: |
   .. versionchanged:: 2.6.0
      The ``deb`` and ``rpm`` packages include a default
      configuration file that sets {{role}} to ``127.0.0.1``.
-directive: option
-description: |
+
   Specifies the IP address that {{program}} binds to in order to listen
   for connections from applications. You may attach {{program}} to any
   interface. When attaching {{program}} to a publicly accessible
@@ -203,9 +204,10 @@ args: <path>
 directive: option
 description: |
   Specifies a file location to hold the process ID of the {{program}}
-  process. This is useful for tracking the {{program}} process in
-  combination with the :option:`--fork` option. Without a specified
-  {{role}} option, the process creates no PID file.
+  process where {{program}} will write its PID. This is useful for
+  tracking the {{program}} process in combination with the
+  :option:`--fork` option. Without a specified {{role}} option, the
+  process creates no PID file.
 optional: true
 ---
 program: mongod
@@ -213,7 +215,7 @@ name: keyFile
 args: <file>
 directive: option
 description: |
-  Specifies the path to a key file to that stores the shared secret
+  Specifies the path to a key file that stores the shared secret
   that MongoDB instances use to authenticate to each other in a
   :term:`sharded cluster` or :term:`replica set`. {{role}} implies
   {{auth_option}}. See :ref:`inter-process-auth` for more
@@ -299,9 +301,7 @@ args: null
 directive: option
 description: |
   Forces the {{program}} process to report the percentage of CPU time in
-  write lock. The process generates output every four seconds and writes
-  the data to standard output or, if you are using the :setting:`systemLog.path`
-  option, to the log file.
+  write lock, every four seconds.
 optional: true
 ---
 program: mongod
@@ -311,9 +311,11 @@ default: |
   ``/data/db`` on Linux and OS X, ``\data\db`` on Windows
 directive: option
 description: |
-  The directory where the {{program}} instance stores its data. If you
+  The directory where the {{program}} instance stores its data. 
+
+  If you
   installed MongoDB using a package management system, check the
-  ``/etc/mongodb.conf`` file provided by your packages to see which
+  ``/etc/mongodb.conf`` file provided by your packages to see the
   directory is specified.
 optional: true
 ---
@@ -372,14 +374,14 @@ description: |
 
      mongosniff --source DIAGLOG /data/db/diaglog.4f76a58c
 
-   .. warning::
+  .. warning::
 
-      Setting the diagnostic level to ``0`` will cause :program:`mongod`
-      to stop writing data to the :term:`diagnostic log` file. However,
-      the :program:`mongod` instance will continue to keep the file open,
-      even if it is no longer writing data to the file. If you want to
-      rename, move, or delete the diagnostic log you must cleanly shut
-      down the :program:`mongod` instance before doing so.
+     Setting the diagnostic level to ``0`` will cause :program:`mongod`
+     to stop writing data to the :term:`diagnostic log` file. However,
+     the :program:`mongod` instance will continue to keep the file open,
+     even if it is no longer writing data to the file. If you want to
+     rename, move, or delete the diagnostic log you must cleanly shut
+     down the :program:`mongod` instance before doing so.
 optional: true
 ---
 program: mongod
@@ -466,7 +468,7 @@ description: |
 
   To force :program:`mongod` to commit to the journal more frequently, you
   can specify ``j:true``. When a write operation with ``j:true`` is
-  pending, :program:`mongod` will reduce :setting:`~storage.journal.commitIntervalMs`
+  pending, {{program}} will reduce :setting:`~storage.journal.commitIntervalMs`
   to a third of the set value.
 optional: true
 ---
@@ -607,7 +609,7 @@ name: notablescan
 args: null
 directive: option
 description: |
-  Forbids operations that require a table scan.
+  Forbids operations that require a table scan. See :parameter:`notablescan` for additional information.
 optional: true
 ---
 program: mongod
@@ -643,15 +645,49 @@ description: |
 
        - Setting
 
-     * - ``0``
+     * - 0
 
        - Off. No profiling.
 
-     * - ``1``
+     * - 1
 
        - On. Only includes slow operations.
 
-     * - ``2``
+     * - 2
+
+       - On. Includes all operations.
+
+  Database profiling can impact database
+  performance. Enable this option only after careful consideration.
+optional: true
+---
+program: mongod
+name: profilingmode
+args: <level>
+default: "off"
+directive: option
+description: |
+  Changes the level of database profiling, which inserts information about
+  operation performance into standard output or a log file. Specify one
+  of the following levels:
+
+  .. list-table::
+     :header-rows: 1
+     :widths: 20 40
+
+     * - Level
+
+       - Setting
+
+     * - ``off``
+
+       - Off. No profiling.
+
+     * - ``slowOp``
+
+       - On. Only includes slow operations.
+
+     * - ``all``
 
        - On. Includes all operations.
 
@@ -748,7 +784,7 @@ optional: true
 ---
 program: mongod
 name: slowms
-args: <value>
+args: <integer>
 default: 100
 directive: option
 description: |
@@ -779,11 +815,11 @@ name: shutdown
 args: null
 directive: option
 description: |
-  Used in :term:`control scripts <control script>`, the {{role}} option
-  cleanly and safely terminates the {{program}} process. When invoking
-  {{program}} with this option you must set the :option:`--dbpath` option
-  either directly or by way of the :doc:`configuration file
-  </reference/configuration-options>` and the :option:`--config` option.
+  The {{role}} option cleanly and safely terminates the {{program}}
+  process. When invoking {{program}} with this option you must set the
+  :option:`--dbpath` option either directly or by way of the
+  :doc:`configuration file </reference/configuration-options>` and the
+  :option:`--config` option.
 
   The {{role}} option is available only on Linux systems.
 optional: true
@@ -890,6 +926,8 @@ description: |
   systems, the oplog is typically 5% of available disk space. Once the
   {{program}} has created the oplog for the first time, changing the
   {{role}} option will not affect the size of the oplog.
+
+  See :ref:`replica-set-oplog-sizing` for more information.
 optional: true
 ---
 program: mongod
@@ -1015,11 +1053,11 @@ directive: option
 description: |
   Declares that this {{program}} instance serves as the
   :term:`config database` of a sharded cluster. When running with
-  this option, clients will not be able to write data to any database
-  other than ``config`` and ``admin``. The default port for a
-  {{program}} with this option is ``27019`` and the default
-  :option:`--dbpath` directory is ``/data/configdb``, unless
-  specified.
+  this option, clients (i.e. other cluster components) will not be
+  able to write data to any database other than ``config`` and
+  ``admin``. The default port for a {{program}} with this option is
+  ``27019`` and the default :option:`--dbpath` directory is
+  ``/data/configdb``, unless specified.
 
   .. versionchanged:: 2.2
      The {{role}} option also sets :option:`--smallfiles`.
@@ -1208,6 +1246,8 @@ description: |
 
   The default distribution of MongoDB does not contain support for SSL.
   For more information on MongoDB and SSL, see :doc:`/tutorial/configure-ssl`.
+
+  .. include:: /includes/warning-x509-requires-sslCAfile.rst
 optional: true
 ---
 program: mongod

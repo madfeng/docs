@@ -7,10 +7,18 @@ Install MongoDB Enterprise on Ubuntu
 Overview
 --------
 
-Use this tutorial to install MongoDB Enterprise on Ubuntu Linux systems.
-The tutorial uses ``.deb`` packages to install.
+Use this tutorial to install MongoDB Enterprise on Ubuntu Linux systems from
+``.deb`` packages.
 
 .. include:: /includes/list-mongodb-enterprise-packages.rst
+
+Considerations
+--------------
+
+MongoDB only provides Enterprise packages for Ubuntu
+12.04 LTS (Precise Pangolin).
+
+.. include:: /includes/note-package-change.rst
 
 Install MongoDB Enterprise
 --------------------------
@@ -20,10 +28,9 @@ Install MongoDB Enterprise
 Run MongoDB Enterprise
 ----------------------
 
-The MongoDB Enterprise instance stores its data files in ``/var/lib/mongo``
-and its log files in ``/var/log/mongo``, and runs using the ``mongod``
-user account. If you change the user that runs the MongoDB process, you
-**must** modify the access control rights to the ``/var/lib/mongo`` and
-``/var/log/mongo`` directories.
+.. |mongod-user| replace:: ``mongodb``
+.. |mongod-datadir| replace:: ``/var/lib/mongodb``
+
+.. include:: /includes/fact-installation-directories.rst
 
 .. include:: /includes/steps/run-mongodb-on-debian.rst

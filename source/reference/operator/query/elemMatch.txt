@@ -2,61 +2,92 @@
 $elemMatch (query)
 ==================
 
-
 .. default-domain:: mongodb
+
+.. seealso::
+
+   :doc:`/reference/operator/projection/elemMatch`
 
 Definition
 ----------
 
 .. query:: $elemMatch
 
-   .. versionadded:: 1.4
-
    The :query:`$elemMatch` operator matches documents in a collection that
-   contain an array field with at least one embedded document or value
-   that matches all the specified criteria.
+   contain an array field with at least one element that matches all the
+   specified query criteria.
+
+   .. code-block:: javascript
+
+      { <field>: { $elemMatch: { <query1>, <query2>, ... } } }
 
 Behavior
 --------
 
-.. versionchanged:: 2.6
-
-The :query:`$where` query operator will not work inside an
-:query:`$elemMatch` query applied to nested documents.
+You cannot specify a :query:`$where` expression as a query criterion
+for :query:`$elemMatch`.
 
 Examples
 --------
 
-Consider the following query:
+Element Match
+~~~~~~~~~~~~~
+
+Given the following documents in the ``scores`` collection:
 
 .. code-block:: javascript
 
-   db.grades.find( { records: { $elemMatch: { student: "Jane", grade: { $gt: 85 } } } } );
+   { _id: 1, results: [ 82, 85, 88 ] }
+   { _id: 2, results: [ 75, 88, 89 ] }
 
-This example returns all documents in the ``grades`` collection where
-any element in the ``records`` array satisfies all of the conditions in
-the :query:`$elemMatch` expression. This example returns all documents
-in the ``grades`` collection where the ``records`` array contains at
-least one element with both ``student`` equal to ``Jane`` and ``grade``
-greater than ``85``.
-
-Because matching arrays must have at least one element that matches all
-specified criteria, the document below would match the query because
-the ``{ student: "Jane", grade: 90 }`` embedded document matches all
-the specified criteria:
+The following query matches only those documents where the ``results``
+array contains at least one element that is both greater than or equal
+to ``80`` and is less than ``85``.
 
 .. code-block:: javascript
 
-   { records: [ { student: "Jane", grade: 90 }, { student: "Jane", grade: 78 } ] }
+   db.scores.find( 
+      { results: { $elemMatch: { $gte: 80, $lt: 85 } } }
+   )
 
-However, the following document would not match the query because no
-embedded document meets the specified criteria:
+The query returns the following document since the element ``82`` is
+both greater than or equal to ``80`` and is less than ``85``
 
 .. code-block:: javascript
 
-   { records: [ { student: "Jane", grade: 78 }, { student: "Bob", grade: 90 } ] }
+   { "_id" : 1, "results" : [ 82, 85, 88 ] }
 
-Related Information
--------------------
+For more information on specifying multiple criterion on array
+elements, see :ref:`specify-multiple-criteria-for-array-elements`.
 
-:doc:`/reference/operator/projection/elemMatch`
+Array of Embedded Documents
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Given the following documents in the ``survey`` collection:
+
+.. code-block:: javascript
+
+   { _id: 1, results: [ { product: "abc", score: 10 }, { product: "xyz", score: 5 } ] }
+   { _id: 2, results: [ { product: "abc", score: 8 }, { product: "xyz", score: 7 } ] }
+   { _id: 3, results: [ { product: "abc", score: 7 }, { product: "xyz", score: 8 } ] }
+
+The following query matches only those documents where the ``results``
+array contains at least one element with both ``product`` equal to
+``"xyz"`` and ``score`` greater than or equal to ``8``.
+
+.. code-block:: javascript
+
+   db.survey.find( 
+      { results: { $elemMatch: { product: "xyz", score: { $gte: 8 } } } }
+   )
+
+Specifically, the query matches the following document:
+
+.. code-block:: javascript
+
+   { "_id" : 3, "results" : [ { "product" : "abc", "score" : 7 }, { "product" : "xyz", "score" : 8 } ] }
+
+For more information on querying arrays, see
+:ref:`read-operations-arrays`, including
+:ref:`specify-multiple-criteria-for-array-elements` and
+:ref:`array-match-embedded-documents` sections.

@@ -207,7 +207,7 @@ For comprehensive documentation on cursors, see
 Iterate over the Cursor with a Loop
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Before using this procedure, make sure to add at least 25 documents to a
+Before using this procedure, add documents to a
 collection using one of the procedures in
 :doc:`/tutorial/generate-test-data`. You can name your database and
 collections anything you choose, but this procedure will assume the
@@ -231,32 +231,14 @@ database named ``test`` and a collection named ``testData``.
    The ``next()`` method returns the next document. The
    ``printjson()`` method renders the document in a JSON-like format.
 
-   The operation displays 20 documents. For example, if the documents
-   have a single field named ``x``, the operation displays the field as
-   well as each document's ``ObjectId``:
+   The operation displays all documents:
 
    .. code-block:: javascript
 
       { "_id" : ObjectId("51a7dc7b2cacf40b79990be6"), "x" : 1 }
       { "_id" : ObjectId("51a7dc7b2cacf40b79990be7"), "x" : 2 }
       { "_id" : ObjectId("51a7dc7b2cacf40b79990be8"), "x" : 3 }
-      { "_id" : ObjectId("51a7dc7b2cacf40b79990be9"), "x" : 4 }
-      { "_id" : ObjectId("51a7dc7b2cacf40b79990bea"), "x" : 5 }
-      { "_id" : ObjectId("51a7dc7b2cacf40b79990beb"), "x" : 6 }
-      { "_id" : ObjectId("51a7dc7b2cacf40b79990bec"), "x" : 7 }
-      { "_id" : ObjectId("51a7dc7b2cacf40b79990bed"), "x" : 8 }
-      { "_id" : ObjectId("51a7dc7b2cacf40b79990bee"), "x" : 9 }
-      { "_id" : ObjectId("51a7dc7b2cacf40b79990bef"), "x" : 10 }
-      { "_id" : ObjectId("51a7dc7b2cacf40b79990bf0"), "x" : 11 }
-      { "_id" : ObjectId("51a7dc7b2cacf40b79990bf1"), "x" : 12 }
-      { "_id" : ObjectId("51a7dc7b2cacf40b79990bf2"), "x" : 13 }
-      { "_id" : ObjectId("51a7dc7b2cacf40b79990bf3"), "x" : 14 }
-      { "_id" : ObjectId("51a7dc7b2cacf40b79990bf4"), "x" : 15 }
-      { "_id" : ObjectId("51a7dc7b2cacf40b79990bf5"), "x" : 16 }
-      { "_id" : ObjectId("51a7dc7b2cacf40b79990bf6"), "x" : 17 }
-      { "_id" : ObjectId("51a7dc7b2cacf40b79990bf7"), "x" : 18 }
-      { "_id" : ObjectId("51a7dc7b2cacf40b79990bf8"), "x" : 19 }
-      { "_id" : ObjectId("51a7dc7b2cacf40b79990bf9"), "x" : 20 }
+      ...
 
 Use Array Operations with the Cursor
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -374,4 +356,4 @@ you continue to learn MongoDB, consider the following resources:
 
 - :doc:`/crud`
 - :doc:`/reference/sql-comparison`
-- :doc:`/applications/drivers`
+- :ecosystem:`MongoDB Drivers </drivers>`

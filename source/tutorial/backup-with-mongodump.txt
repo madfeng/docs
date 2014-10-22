@@ -8,14 +8,13 @@ This document describes the process for writing and restoring backups
 to files in binary format  with the :program:`mongodump`  and
 :program:`mongorestore` tools.
 
-Use these tools for backups if other backup methods, such as the `MMS Backup Service
-<https://mms.mongodb.com/?pk_campaign=mongodb-docs-tools>`_ or
+Use these tools for backups if other backup methods, such as the
+:mms-home:`MMS Backup Service </>` or
 :doc:`file system snapshots </tutorial/backup-with-filesystem-snapshots>`
 are unavailable.
 
-.. seealso:: :doc:`/core/backups`,
-   :doc:`/reference/program/mongodump`, and
-   :doc:`/reference/program/mongorestore`.
+.. seealso:: :doc:`/core/backups`, :program:`mongodump`, and
+   :program:`mongorestore`.
 
 .. _backup-mongodump:
 
@@ -93,6 +92,8 @@ This operation creates a dump of the collection named ``myCollection``
 from the database ``test`` in a :file:`dump/` subdirectory of the
 current working directory.
 
+.. include:: /includes/fact-mongodump-overwrite-files.rst
+
 Point in Time Operation Using Oplogs
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -101,9 +102,8 @@ Use the :option:`--oplog <mongodump --oplog>` option with
 point-in-time snapshot of a database within a replica set. With :option:`--oplog
 <mongodump --oplog>`, :program:`mongodump` copies all the data from
 the source database as well as all of the :term:`oplog` entries from
-the beginning of the backup procedure to until the backup procedure
-completes. This backup procedure, in conjunction with
-:option:`mongorestore --oplogReplay <mongorestore --oplogReplay>`,
+the beginning to the end of the backup procedure. This operation, in
+conjunction with :option:`mongorestore --oplogReplay <mongorestore --oplogReplay>`,
 allows you to restore a backup that reflects the specific
 moment in time that corresponds to when :program:`mongodump` completed
 creating the dump file.
@@ -281,9 +281,6 @@ needing to connect to a :program:`mongod` directly.
    :term:`journal`. The journal prevents data file corruption if
    anything (e.g. power failure, disk failure, etc.) interrupts the
    restore operation.
-
-.. seealso:: :doc:`/reference/program/mongodump` and
-   :doc:`/reference/program/mongorestore`.
 
 Restore Backups to Non-Local ``mongod`` Instances
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

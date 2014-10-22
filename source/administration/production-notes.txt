@@ -7,13 +7,7 @@ Production Notes
 This page details system configurations that affect MongoDB,
 especially in production.
 
-.. note::
-   `MongoDB Management Service (MMS) <http://mms.mongodb.com>`_ is a hosted monitoring service
-   which collects and aggregates diagnostic data to provide insight into
-   the performance and operation of MongoDB deployments. See the
-   `MMS Website <http://mms.mongodb.com/>`_ and the
-   `MMS documentation <http://mms.mongodb.com/help/>`_ for more
-   information.
+.. include:: /includes/fact-mms-summary.rst
 
 Packages
 --------
@@ -30,7 +24,7 @@ package manager.
 Always use 64-bit builds for production. The 32-bit build MongoDB
 offers for test and development environments is not suitable for
 production deployments as it can store no more than 2GB of data.
-See the :ref:`32-bit limitations
+See the :ref:`32-bit limitations page
 <faq-32-bit-limitations>` for more information.
 
 32-bit builds exist to support use on development machines.
@@ -163,52 +157,51 @@ Avoid Remote File Systems
 MongoDB and NUMA Hardware
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. important::
-   The discussion of NUMA in this section only applies to Linux systems
-   with *multiple* physical processors, and therefore does *not affect*
-   deployments where :program:`mongod` instances run on other UNIX-like
-   systems, on Windows, or on a Linux system with only one physical
-   processor.
-
 Running MongoDB on a system with Non-Uniform Access Memory (NUMA) can
 cause a number of operational problems, including slow performance for
-periods of time or high system process usage.
+periods of time and high system process usage.
 
-When running MongoDB on NUMA hardware, you should disable NUMA for
-MongoDB and instead set an interleave memory policy.
+When running MongoDB servers and clients on NUMA hardware, you should configure
+a memory interleave policy so that the host behaves in a non-NUMA fashion.
+MongoDB checks NUMA settings on start up when deployed on Linux (since version
+2.0) and Windows (since version 2.6) machines, and prints a warning if the
+NUMA configuration may degrade performance.
 
-.. note::
-
-   MongoDB version 2.0 and greater checks these settings on start up
-   when deployed on a Linux-based system, and prints a warning if the
-   system is NUMA-based.
-
-To disable NUMA for MongoDB and set an interleave memory policy, use
-the ``numactl`` command and start :program:`mongod` in the following
-manner:
-
-.. code-block:: sh
-
-   numactl --interleave=all /usr/bin/local/mongod
-
-Then, disable *zone reclaim* in the ``proc`` settings using the following
-command:
-
-.. code-block:: sh
-
-   echo 0 > /proc/sys/vm/zone_reclaim_mode
-
-To fully disable NUMA, you must perform both operations. For more
-information, see the `Documentation for /proc/sys/vm/*
-<http://www.kernel.org/doc/Documentation/sysctl/vm.txt>`_.
-
-See the `The MySQL "swap insanity" problem and the effects of NUMA
+See `The MySQL "swap insanity" problem and the effects of NUMA
 <http://jcole.us/blog/archives/2010/09/28/mysql-swap-insanity-and-the
 -nu ma-architecture/>`_ post, which describes the effects of NUMA on
 databases. This blog post addresses the impact of NUMA for MySQL,
 but the issues for MongoDB are similar. The post introduces NUMA and
 its goals, and illustrates how these goals are not compatible with
 production databases.
+
+Configuring NUMA on Windows
+```````````````````````````
+
+On Windows, memory interleaving must be enabled through the machine's BIOS.
+Please consult your system documentation for details.
+
+Configuring NUMA on Linux
+`````````````````````````
+
+When running MongoDB on Linux you may instead use the  ``numactl`` command
+and start the MongoDB programs (:program:`mongod`, :program:`mongos`, or
+clients) in the following manner:
+
+.. code-block:: sh
+
+   numactl --interleave=all <path>
+
+where ``<path>`` is the path to the program you are starting. Then,
+disable *zone reclaim* in the ``proc`` settings using the following command:
+
+.. code-block:: sh
+
+   echo 0 > /proc/sys/vm/zone_reclaim_mode
+
+To fully disable NUMA behavior, you must perform both operations. For more
+information, see the `Documentation for /proc/sys/vm/*
+<http://www.kernel.org/doc/Documentation/sysctl/vm.txt>`_.
 
 Disk and Storage Systems
 ~~~~~~~~~~~~~~~~~~~~~~~~
@@ -258,8 +251,20 @@ journal, and logs onto different storage devices, based on your application's
 access and write pattern.
 
 .. note::
+
    This will affect your ability to create snapshot-style backups of
    your data, since the files will be on different devices and volumes.
+
+.. _virtualized-disks-scheduling:
+
+Scheduling for Virtual Devices
+``````````````````````````````
+
+Local block devices attached to virtual machine instances via the
+hypervisor should use a *noop* scheduler for best performance. The
+*noop* scheduler allows the operating system to defer I/O scheduling to
+the underlying hypervisor.
+
 
 Architecture
 ------------
@@ -338,7 +343,7 @@ Recommended Configuration
 - Disable ``transparent huge pages`` as MongoDB performs
   better with normal (4096 bytes) virtual memory pages.
 
-- Disable NUMA in your BIOS. If that is not possible see 
+- Disable NUMA in your BIOS. If that is not possible see
   :ref:`MongoDB on NUMA Hardware <production-numa>`.
 
 - Ensure that readahead settings for the block devices that store the
@@ -365,6 +370,8 @@ MongoDB on Virtual Environments
 
 The section describes considerations when running MongoDB in some of the
 more common virtual environments.
+
+For all platforms, consider :ref:`virtualized-disks-scheduling`.
 
 EC2
 ```

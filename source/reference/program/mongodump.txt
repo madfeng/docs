@@ -39,6 +39,8 @@ from :term:`secondary` members of the set.
 
 .. include:: /includes/warning-fsync-lock-mongodump.rst
 
+.. include:: /includes/fact-mongodump-overwrite-files.rst
+
 Required Access
 ---------------
 
@@ -94,6 +96,10 @@ Options
 .. include:: /includes/option/option-mongodump-authenticationDatabase.rst
 
 .. include:: /includes/option/option-mongodump-authenticationMechanism.rst
+
+.. include:: /includes/option/option-mongodump-gssapiServiceName.rst
+
+.. include:: /includes/option/option-mongodump-gssapiHostName.rst
 
 .. include:: /includes/option/option-mongodump-dbpath.rst
 

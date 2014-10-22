@@ -22,6 +22,12 @@ inherit:
   name: quiet
   program: _shared
   file: options-shared.yaml
+post: |
+  This option suppresses:
+
+  - connection accepted events
+
+  - connection closed events
 ---
 program: mongooplog
 name: version
@@ -44,12 +50,13 @@ description: |
   By default {{program}} attempts to connect to a MongoDB instance running
   on the localhost on port number ``27017``.
 
-  To connect to a replica set, specify the replica set seed name and the
-  seed list of set members. Use the following format:
+  To connect to a replica set, specify the :setting:`replica set name
+  <~replication.replSetName>` and a seed list of set members. Use the
+  following form:
 
-  .. code-block:: javascript
+  .. code-block:: none
 
-     <replica_set_name>/<hostname1><:port>,<hostname2:<port>,...
+     <replSetName>/<hostname1><:port>,<hostname2><:port>,<...>
 
   You can always connect directly to a single MongoDB instance by
   specifying the host and port number directly.
@@ -152,6 +159,20 @@ inherit:
   file: options-shared.yaml
 ---
 program: mongooplog
+name: gssapiServiceName
+inherit:
+  name: gssapiServiceName
+  program: _shared
+  file: options-shared.yaml
+---
+program: mongooplog
+name: gssapiHostName
+inherit:
+  name: gssapiHostName
+  program: _shared
+  file: options-shared.yaml
+---
+program: mongooplog
 name: dbpath
 directive: option
 args: <path>
@@ -233,8 +254,10 @@ description: |
   Specify a namespace in the :option:`--from <mongooplog --from>` host
   where the oplog resides. The default value is ``local.oplog.rs``, which
   is the where :term:`replica set` members store their operation log.
-  However, if you've copied :term:`oplog` entries into another database or
-  collection, use this option to copy oplog entries stored in another
-  location. Namespaces take the form of ``[database].[collection]``.
+  However, if you've copied :term:`oplog` entries into another
+  database or collection or are pulling oplog entries from a
+  :doc:`master-slave </core/master-slave>` deployment, use {{role}} to
+  apply oplog entries stored in another location. Namespaces take the
+  form of ``[database].[collection]``.
 optional: true
 ...

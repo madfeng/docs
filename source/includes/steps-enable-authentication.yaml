@@ -44,6 +44,13 @@ post: |
    After you create the user administrator, the
    :ref:`localhost exception <localhost-exception>` is no longer
    available.
+
+   The :program:`mongo` shell executes a number of commands at start
+   up. As a result, when you log in as the user administrator, you may
+   see authentication errors from one or more commands. You may ignore
+   these errors, which are expected, because the
+   :authrole:`userAdminAnyDatabase` role does not have permissions to
+   run some of the start up commands.
 ---
 title: Create additional users.
 stepnum: 4

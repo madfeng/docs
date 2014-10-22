@@ -233,7 +233,7 @@ Glossary
 
    dot notation
       MongoDB uses the dot notation to access the elements of an array
-      and to access the fields of a subdocument. See
+      and to access the fields of an embedded document. See
       :ref:`document-dot-notation`.
 
    draining
@@ -250,6 +250,10 @@ Glossary
       The process by which members of a :term:`replica set` select a
       :term:`primary` on startup and in the event of a failure. See
       :ref:`replica-set-elections`.
+
+   unix epoch
+      January 1st, 1970 at 00:00:00 UTC. Commonly used in expressing time,
+      where the number of seconds or milliseconds since this point is counted.
 
    eventual consistency
       A property of a distributed system that allows changes to the
@@ -273,6 +277,10 @@ Glossary
       A name-value pair in a :term:`document <document>`. A document has
       zero or more fields. Fields are analogous to columns in relational
       databases. See :ref:`document-structure`.
+
+   field path
+      Path to a field in the document. To specify a field path, use a
+      string that prefixes the field name with a dollar sign (``$``).
 
    firewall
       A system level networking filter that restricts access based on,
@@ -490,18 +498,12 @@ Glossary
       belong to a namespace. See :ref:`faq-dev-namespace`.
 
    natural order
-      The order that a database stores documents on disk. Typically,
-      the order of documents on disks reflects insertion order, except
-      when a document moves internally because an update operation
-      increases its size. In :term:`capped collections <capped
-      collection>`, insertion order and natural order are identical
-      because documents do not move internally. MongoDB returns
-      documents in forward natural order for a
-      :method:`~db.collection.find()` query with no parameters.
-      MongoDB returns documents in reverse natural order for a
-      :method:`~db.collection.find()` query :method:`sorted
-      <cursor.sort()>` with a parameter of ``$natural:-1``. See
-      :operator:`$natural`.
+      The order in which the database refers to documents on disk. This is the
+      default sort order. See :operator:`$natural` and
+      :ref:`return-natural-order`.
+
+   storage order
+      See :term:`natural order`.
 
    ObjectId
       A special 12-byte :term:`BSON` type that guarantees uniqueness
@@ -539,7 +541,7 @@ Glossary
       The extra space allocated to document on the disk to prevent
       moving a document when it grows as the result of
       :method:`~db.collection.update()`
-      operations. See :ref:`write-operations-padding-factor`.
+      operations. See :ref:`record-allocation-strategies`.
 
    padding factor
       An automatically-calibrated constant used to determine how much
@@ -548,12 +550,13 @@ Glossary
       amount of space needed for the document. A padding factor of 2
       means that MongoDB will allocate twice the amount of space
       required by the document. See
-      :ref:`write-operations-padding-factor`.
+      :ref:`record-allocation-strategies`.
 
    page fault
-      The event that occurs when a process requests stored data
-      (i.e. a page) from memory that the operating system has moved to
-      disk. See :ref:`faq-storage-page-faults`.
+      .. include:: /includes/fact-page-fault.rst
+
+      See :ref:`administration-monitoring-page-faults` and
+      :ref:`faq-storage-page-faults`.
 
    partition
       A distributed system architecture that splits data into ranges.
@@ -700,7 +703,7 @@ Glossary
 
    record size
       The space allocated for a document including the padding. For more
-      information on padding, see :ref:`write-operations-padding-factor`
+      information on padding, see :ref:`record-allocation-strategies`
       and :doc:`/reference/command/compact`.
 
    recovering
@@ -878,6 +881,20 @@ Glossary
      sections of this manual: :ref:`replica-set-read-preference-tag-sets`
      and :ref:`shards-tag-sets`.
 
+   tailable cursor
+     For a :term:`capped collection`, a tailable cursor is a cursor that
+     remains open after the client exhausts the results in the initial
+     cursor. As clients insert new documents into the capped collection,
+     the tailable cursor continues to retrieve documents. See
+     :doc:`/tutorial/create-tailable-cursor`.
+
+   topology
+     The state of a :term:`deployment` of MongoDB instances, including
+     the type of deployment (i.e. standalone, replica set, or sharded
+     cluster) as well as the availability of servers, and the role of
+     each server (i.e. :term:`primary`, :term:`secondary`,
+     :term:`config server`, or :program:`mongos`.)
+
    TSV
       A text-based data format consisting of tab-separated values.
       This format is commonly used to exchange data between relational
@@ -901,10 +918,12 @@ Glossary
       See :ref:`read-operations-query-optimization`.
 
    upsert
-      An operation that will either update the first document matched by
-      a query or insert a new document if none matches. The new document
-      will have the fields implied by the operation. You perform upserts
-      with the :method:`~db.collection.update()` operation. See
+      An option for update operations. If set to true, the update
+      operation will either update the first document matched by a
+      query or insert a new document if none matches. The new document
+      will have the fields implied by the operation. The
+      :method:`~db.collection.update()` and
+      :method:`~db.collection.findAndModify()` have the option. See
       :ref:`upsert-parameter`.
 
    virtual memory

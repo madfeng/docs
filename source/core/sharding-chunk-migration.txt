@@ -40,6 +40,9 @@ All chunk migrations use the following procedure:
    route to the source shard. The source shard is responsible for
    incoming write operations for the chunk.
 
+#. The destination shard builds any indexes required by the source
+   that do not exist on the destination.
+
 #. The destination shard begins requesting documents in the chunk and
    starts receiving copies of the data.
 
@@ -96,23 +99,24 @@ primary can orphan data from multiple migrations.
 Chunk Migration and Replication
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-By default, each document move during chunk migration propagates to at
-least one secondary before the balancer proceeds with its next
-operation.
+By default, each document operation during chunk migration propagates to at
+least one secondary before the balancer proceeds with the next
+document.
 
-To override this behavior and allow the balancer to continue before
-replicating to a secondary, set the ``_secondaryThrottle`` parameter to
-``false``. See :ref:`sharded-cluster-config-secondary-throttle` to
+To override this behavior and allow the balancer to continue without
+waiting for replication to a secondary, set the ``_secondaryThrottle`` parameter
+to ``false``. See :ref:`sharded-cluster-config-secondary-throttle` to
 update the ``_secondaryThrottle`` parameter for the balancer.
 
-Independent of the ``secondaryThrottle`` setting, certain operations of
+Independent of the ``secondaryThrottle`` setting, certain phases of
 the chunk migration have the following replication policy:
 
 - MongoDB briefly pauses all application writes to the source shard
   before updating the config servers with the new location for the
   chunk, and resumes the application writes after the update. The
-  chunk commit requires all writes to be durably replicated to a
-  majority of servers in order to proceed and finish.
+  chunk move requires all writes to be acknowledged by majority of
+  the members of the replica set both before and after committing
+  the chunk move to config servers.
 
 - When an outgoing chunk migration finishes and cleanup occurs, all
   writes must be replicated to a majority of servers before further
@@ -125,3 +129,16 @@ the chunk migration have the following replication policy:
    move to replicate to a secondary. For details, see :v2.2:`Secondary
    Throttle in the v2.2 Manual
    </tutorial/configure-sharded-cluster-balancer/#sharded-cluster-config-secondary-throttle>`
+
+.. _jumbo-chunks:
+
+Jumbo Chunks
+------------
+
+During chunk migration, if the chunk exceeds the :ref:`specified chunk
+size <sharding-chunk-size>` or the number of documents in the chunk
+exceeds :limit:`Maximum Number of Documents Per Chunk to Migrate`,
+MongoDB does not migrate the chunk. Instead, MongoDB attempts to
+:doc:`split </core/sharding-chunk-splitting>` the chunk. If the split
+is unsuccessful, MongoDB labels the chunk as *jumbo* to avoid repeated
+attempts to migrate the chunk.

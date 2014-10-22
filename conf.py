@@ -11,29 +11,23 @@ import datetime
 
 from sphinx.errors import SphinxError
 
+from giza.config.runtime import RuntimeStateConfig
+from giza.config.helper import fetch_config, get_versions, get_manual_path
+from giza.tools.strings import dot_concat
+
+conf = fetch_config(RuntimeStateConfig())
+sconf = conf.system.files.data.sphinx_local
+
+sys.path.append(os.path.join(conf.paths.projectroot, conf.paths.buildsystem, 'sphinxext'))
+
 try:
-    project_root = os.path.join(os.path.abspath(os.path.dirname(__file__)))
+    tags
 except NameError:
-    project_root = os.path.abspath(os.getcwd())
+    class Tags(object):
+        def has(self, *args):
+            return False
 
-sys.path.append(project_root)
-
-from bootstrap import buildsystem
-
-sys.path.append(os.path.join(project_root, buildsystem, 'sphinxext'))
-sys.path.append(os.path.join(project_root, buildsystem, 'bin'))
-
-from utils.config import get_conf
-from utils.project import get_versions, get_manual_path
-from utils.serialization import ingest_yaml, ingest_yaml_list
-from utils.structures import BuildConfiguration
-from utils.strings import dot_concat
-
-conf = get_conf()
-
-conf.paths.projectroot = project_root
-intersphinx_libs = ingest_yaml_list(os.path.join(conf.paths.builddata, 'intersphinx.yaml'))
-sconf = BuildConfiguration(os.path.join(conf.paths.builddata, 'sphinx-local.yaml'))
+    tags = Tags()
 
 # -- General configuration ----------------------------------------------------
 
@@ -82,8 +76,9 @@ extlinks = {
     'manual': ('http://docs.mongodb.org/manual%s', ''),
     'ecosystem': ('http://docs.mongodb.org/ecosystem%s', ''),
     'meta-driver': ('http://docs.mongodb.org/meta-driver/latest%s', ''),
-    'mms': ('https://mms.mongodb.com/help%s', ''),
-    'mms-hosted': ('https://mms.mongodb.org/help-hosted%s', ''),
+    'mms': ('https://docs.mms.mongodb.com%s', ''),
+    'mms-hosted': ('https://mms.mongodb.com/help-hosted%s', ''),
+    'mms-home': ('https://mms.mongodb.com%s', ''),
     'about': ('http://www.mongodb.org/about%s', '')
 }
 
@@ -91,11 +86,12 @@ extlinks = {
 for i in conf.git.branches.published:
     extlinks[i] = ( ''.join([ conf.project.url, '/', i, '%s' ]), '' )
 
+
 intersphinx_mapping = {}
-for i in intersphinx_libs:
-    intersphinx_mapping[i['name']] = ( i['url'], os.path.join(conf.paths.projectroot,
-                                                              conf.paths.output,
-                                                              i['path']))
+for i in conf.system.files.data.intersphinx:
+    intersphinx_mapping[i.name] = ( i.url, os.path.join(conf.paths.projectroot,
+                                                        conf.paths.output,
+                                                        i.path))
 
 languages = [
     ("ar", "Arabic"),
@@ -121,7 +117,7 @@ languages = [
 # -- Options for HTML output ---------------------------------------------------
 
 html_theme = sconf.theme.name
-html_theme_path = [ os.path.join(buildsystem, 'themes') ]
+html_theme_path = [ os.path.join(conf.paths.buildsystem, 'themes') ]
 html_title = conf.project.title
 htmlhelp_basename = 'MongoDBdoc'
 
@@ -163,21 +159,10 @@ html_sidebars = sconf.sidebars
 
 # -- Options for LaTeX output --------------------------------------------------
 
-pdfs = []
-try:
-    if tags.has('latex'):
-        pdf_conf_path = os.path.join(conf.paths.builddata, 'pdfs.yaml')
-        if os.path.exists(pdf_conf_path):
-            pdfs = ingest_yaml_list(pdf_conf_path)
-        else:
-            raise SphinxError('[WARNING]: skipping pdf builds because of missing {0} file'.format(pdf_conf_path))
-except NameError:
-    pass
-
 latex_documents = []
-for pdf in pdfs:
-    _latex_document = ( pdf['source'], pdf['output'], pdf['title'], pdf['author'], pdf['class'])
-    latex_documents.append( _latex_document )
+if 'pdfs' in conf.system.files.data:
+    for pdf in conf.system.files.data.pdfs:
+        latex_documents.append((pdf.source, pdf.output, pdf.title, pdf.author, pdf.doc_class))
 
 latex_preamble_elements = [ r'\DeclareUnicodeCharacter{FF04}{\$}',
                             r'\DeclareUnicodeCharacter{FF0E}{.}',
@@ -201,19 +186,10 @@ latex_appendices = []
 
 # -- Options for manual page output --------------------------------------------
 
-man_page_definitions = []
-try:
-    if tags.has('man'):
-        man_page_conf_path = os.path.join(conf.paths.builddata, 'manpages.yaml')
-        if os.path.exists(man_page_conf_path):
-            man_page_definitions = ingest_yaml_list(man_page_conf_path)
-        else:
-            raise SphinxError('[WARNING]: skipping man builds because of missing {0} file'.format(man_page_conf_path))
-except NameError:
-    pass
 man_pages = []
-for mp in man_page_definitions:
-    man_pages.append((mp['file'], mp['name'], mp['title'], mp['authors'], mp['section']))
+if 'manpages' in conf.system.files.data:
+    for mp in conf.system.files.data.manpages:
+        man_pages.append((mp.file, mp.name, mp.title, mp.authors, mp.section))
 
 # -- Options for Epub output ---------------------------------------------------
 
@@ -232,7 +208,6 @@ epub_exclude_files = []
 
 epub_pre_files = []
 epub_post_files = []
-
 
 # put it into your conf.py
 def setup(app):

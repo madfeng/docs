@@ -1,29 +1,36 @@
-========================
-Insert Data into MongoDB
-========================
+===========
+Insert Data
+===========
 
 .. default-domain:: mongodb
 
 Overview
 --------
 
-Use the :method:`~db.collection.insert()` to add documents to a
-collection in MongoDB. If you attempt to add documents to a collection
-that doesn't exist, MongoDB will implicitly create that
-collection. Consider the following diagram:
-
-.. include:: /images/crud-insert-stages.rst
+Use the :method:`~db.collection.insert()` method to add documents to a
+:term:`collection` in MongoDB. If you attempt to add documents to a
+collection that does not exist, MongoDB will create the collection for
+you.
 
 Prerequisites
 -------------
 
-Set up your current environment before beginning the insert procedure:
+.. include:: /includes/examples/example-gs-insert-prereq.rst
 
-.. include:: /includes/steps/getting-started-insert-prereq.rst
+Insert a Document
+-----------------
 
-Procedures
-----------
+.. include:: /includes/examples/example-gs-insert.rst
 
-.. include:: /includes/toc/dfn-list-primer-insert.rst
+Insert Multiple Documents
+-------------------------
 
-.. include:: /includes/toc/primer-insert.rst
+.. include:: /includes/examples/example-gs-insert-array.rst
+
+Additional Information
+----------------------
+
+You can also use the :method:`Bulk()` API to insert multiple documents.
+See :method:`Bulk()` for more information.
+
+See :doc:`/query` for more information on querying a collection.

@@ -119,11 +119,28 @@ inherit:
   name: authenticationDatabase
   program: _shared
   file: options-shared.yaml
+description: | 
+  If you do not specify an authentication database, {{program}}
+  assumes that the database specified to export holds the user's credentials.
 ---
 program: mongoexport
 name: authenticationMechanism
 inherit:
   name: authenticationMechanism
+  program: _shared
+  file: options-shared.yaml
+---
+program: mongoexport
+name: gssapiServiceName
+inherit:
+  name: gssapiServiceName
+  program: _shared
+  file: options-shared.yaml
+---
+program: mongoexport
+name: gssapiHostName
+inherit:
+  name: gssapiHostName
   program: _shared
   file: options-shared.yaml
 ---
@@ -232,7 +249,7 @@ description: |
 
   .. code:: bash
 
-     mongoexport -d test -c records -q "{ a: { \$gte: 3 } } }" --out exportdir/myRecords.json
+     mongoexport -d test -c records -q "{ a: { \$gte: 3 } }" --out exportdir/myRecords.json
 
   The resulting file contains the following documents:
 

@@ -129,6 +129,20 @@ inherit:
   file: options-shared.yaml
 ---
 program: mongorestore
+name: gssapiServiceName
+inherit:
+  name: gssapiServiceName
+  program: _shared
+  file: options-shared.yaml
+---
+program: mongorestore
+name: gssapiHostName
+inherit:
+  name: gssapiHostName
+  program: _shared
+  file: options-shared.yaml
+---
+program: mongorestore
 name: dbpath
 inherit:
   name: dbpath
@@ -224,6 +238,14 @@ args: null
 description: |
   Modifies the restoration procedure to drop every collection from the
   target database before restoring the collection from the dumped backup.
+
+  With {{role}} specified, {{program}} removes all user
+  credentials and replaces them with users defined in the dump
+  file. Therefore, in systems with :setting:`~security.authorization`
+  enabled, {{program}} must be able to authenticate to an existing
+  user *and* to a user defined in the dump file. If {{program}} can't
+  authenticate to a user defined in the dump file, the restoration
+  process will fail, leaving an empty database.
 optional: true
 ---
 program: mongorestore

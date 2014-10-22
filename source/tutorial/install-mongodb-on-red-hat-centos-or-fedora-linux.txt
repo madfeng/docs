@@ -8,8 +8,8 @@ Overview
 --------
 
 Use this tutorial to install MongoDB on Red Hat Enterprise Linux, CentOS
-Linux, Fedora Linux, or a related system. The tutorial uses ``.rpm``
-packages to install. While some of these distributions include their own
+Linux, Fedora Linux, or a related system from ``.rpm``
+packages. While some of these distributions include their own
 MongoDB packages, the official MongoDB packages are generally more up to
 date.
 
@@ -25,34 +25,34 @@ date.
    With the introduction of ``systemd`` in Fedora 15, the control scripts
    included in the packages available in the MongoDB downloads repository
    are not compatible with Fedora systems. A correction is
-   forthcoming, see :issue:`SERVER-7285` for more information, and in
+   forthcoming; see :issue:`SERVER-7285` for more information. In
    the mean time use your own control scripts *or* install using the
    procedure outlined in :doc:`/tutorial/install-mongodb-on-linux`.
 
-Install MongoDB
----------------
+Considerations
+--------------
 
 For production deployments, always run MongoDB on 64-bit systems.
+
+.. include:: /includes/fact-installation-bind-ip-default-in-config.rst
+
+.. include:: /includes/note-package-change.rst
+
+Install MongoDB
+---------------
 
 .. include:: /includes/steps/install-mongodb-on-red-hat-centos-or-fedora-linux.rst
 
 Run MongoDB
 -----------
 
-.. important:: You must configure SELinux to allow MongoDB to start on
-   Fedora systems. Administrators have two options:
+.. important::
 
-   - enable access to the relevant ports (e.g. 27017) for SELinux. See
-     :ref:`security-port-numbers` for more information on MongoDB's
-     :doc:`default ports </reference/default-mongodb-port>`.
+   .. include:: /includes/fact-selinux-redhat-options.rst
 
-   - disable SELinux entirely. This requires a system reboot and may have
-     larger implications for your deployment.
+.. |mongod-user| replace:: ``mongod``
+.. |mongod-datadir| replace:: ``/var/lib/mongo``
 
-The MongoDB instance stores its data files in ``/var/lib/mongo``
-and its log files in ``/var/log/mongo``, and runs using the ``mongod``
-user account. If you change the user that runs the MongoDB process, you
-**must** modify the access control rights to the ``/var/lib/mongo`` and
-``/var/log/mongo`` directories.
+.. include:: /includes/fact-installation-directories.rst
 
 .. include:: /includes/steps/run-mongodb-on-a-linux-distribution.rst

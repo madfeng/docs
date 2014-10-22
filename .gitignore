@@ -40,7 +40,6 @@ source/includes/steps/
 source/includes/generated/includes-overview.rst
 source/includes/generated/
 source/includes/option/
-primer/config/sphinx.yaml
 primer/conf.py
 primer/source/includes/toc/
 primer/source/includes/table/
@@ -52,11 +51,15 @@ primer/source/includes/hash.rst
 primer/source/.static
 primer/source/*.rst
 primer/source/core/*.rst
+primer/source/includes/example/
 primer/source/includes/*.rst
 primer/source/tutorial/*.rst
 primer/source/includes/toc-*yaml
 primer/source/includes/steps-*yaml
+primer/source/tutorial/install-mongodb-on-*.txt
 !primer/source/includes/toc-primer-*yaml
 !primer/source/includes/steps-primer*yaml
+!primer/source/includes/client-*rst
 primer/source/images/
 *.mo
+.stub

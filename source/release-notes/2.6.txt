@@ -13,9 +13,9 @@ enhancements, text-search integration, query-engine improvements, a new
 write-operation protocol, and security enhancements.
 
 MMS 1.4, which includes On-Prem Backup in addition to Monitoring, is
-now also available. See `MMS 1.4 documentation
-<https://mms.mongodb.com/help-hosted/v1.4/>`_ and the `MMS 1.4 release
-notes <https://mms.mongodb.com/help-hosted/v1.4/management/changelog/>`_
+now also available. See :mms-hosted:`MMS 1.4 documentation
+</v1.4/>` and the :mms-hosted:`MMS 1.4 release
+notes </v1.4/management/changelog/>`
 for more information.
 
 Minor Releases
@@ -27,14 +27,50 @@ Minor Releases
 
       /release-notes/2.6-changelog
 
+2.6.5 -- October 07, 2014
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+- :query:`$rename` now uses correct dotted source paths :issue:`SERVER-15029`
+
+- Partially written journal last section does not affect recovery
+  :issue:`SERVER-15111`
+
+- Explicitly zero ``.ns`` files on creation :issue:`SERVER-15369`
+
+- Plan ranker will no longer favor intersection plans if predicate generates empty range
+  index scan :issue:`SERVER-14961`
+
+- Generate Community and Enterprise packages for SUSE 11
+  :issue:`SERVER-10642`
+
+- `All issues closed in 2.6.5 <https://jira.mongodb.org/issues/?jql=fixVersion%20%3D%20%222.6.5%22%20AND%20project%20%3D%20SERVER>`_
+
+2.6.4 -- August 11, 2014
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+- Fix for ``text`` index where under specific circumstances, in-place
+  updates to a ``text``-indexed field may result in
+  incorrect/incomplete results :issue:`SERVER-14738`
+
+- Check the size of the split point before performing a manual split
+  chunk operation :issue:`SERVER-14431`
+
+- Ensure read preferences are re-evaluated by drawing secondary
+  connections from a global pool and releasing back to the pool at the
+  end of a query/command :issue:`SERVER-9788`
+
+- Allow read from secondaries when both audit and authorization are
+  enabled in a sharded cluster :issue:`SERVER-14170`
+
+- `All issues closed in 2.6.4 <https://jira.mongodb.org/issues/?jql=fixVersion%20%3D%20%222.6.4%22%20AND%20project%20%3D%20SERVER>`_
 
 2.6.3 -- June 19, 2014
 ~~~~~~~~~~~~~~~~~~~~~~
 
-- Equality queries on ``_id`` with projection may return no results 
+- Equality queries on ``_id`` with projection may return no results
   on sharded collections :issue:`SERVER-14302`.
 
-- Equality queries on ``_id`` with projection on ``_id`` may return 
+- Equality queries on ``_id`` with projection on ``_id`` may return
   orphan documents on sharded collections :issue:`SERVER-14304`.
 
 - `All issues closed in 2.6.3 <https://jira.mongodb.org/issues/?jql=fixVersion%20%3D%20%222.6.3%22%20AND%20project%20%3D%20SERVER>`_.
@@ -219,10 +255,12 @@ Specifically these changes include:
   user-defined role data in the ``admin`` database and provides a new
   set of commands for managing users and roles.
 
-- :doc:`x.509 certificate authentication </tutorial/configure-x509>`
-  for client authentication as well as for internal authentication of
-  sharded and/or replica set cluster members. x.509 authentication is
-  only available for deployments using SSL.
+- x.509 certificate authentication for :doc:`client authentication
+  </tutorial/configure-x509-client-authentication>` as well as for
+  :doc:`internal authentication
+  </tutorial/configure-x509-member-authentication>` of sharded and/or
+  replica set cluster members. x.509 authentication is only available
+  for deployments using SSL.
 
 - Enhanced SSL Support:
 
@@ -337,8 +375,9 @@ Configuration Options YAML File Format
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 MongoDB 2.6 supports a YAML-based configuration file format in addition
-to the previous configuration file format. See
-:doc:`/reference/configuration-options` for details.
+to the previous configuration file format. See the documentation of
+the :doc:`Configuration File </reference/configuration-options>` for
+more information.
 
 Operational Changes
 -------------------
@@ -359,6 +398,8 @@ To use the previous *exact-fit allocation strategy*:
 
 - For all new collections on an entire :program:`mongod` instance,
   set :parameter:`newCollectionsUsePowerOf2Sizes` to ``false``.
+
+  .. include:: /includes/fact-definition-new-collection.rst
 
 See :doc:`/core/storage` for more information about MongoDB's storage system.
 
@@ -479,7 +520,7 @@ See :doc:`/release-notes/2.6-compatibility` for a detailed list of
 compatibility changes.
 
 .. seealso::
-   `All Backwards incompatible changes (JIRA) <https://jira.mongodb.org/secure/IssueNavigator.jspa?reset=true&jqlQuery=project+%3D+SERVER+AND+fixVersion+in+%28%222.5.0%22%2C+%222.5.1%22%2C+%222.5.2%22%2C+%222.5.3%22%2C+%222.5.4%22%2C+%222.5.5%22%2C+%222.6.0-rc1%22%2C+%222.6.0-rc2%22%2C+%222.6.0-rc3%22%29+AND+%22Backward+Breaking%22+in+%28+Rarely+%2C+sometimes%2C+yes+%29+ORDER+BY+votes+DESC%2C+issuetype+DESC%2C+key+DESC>`_.
+   `All Backwards incompatible changes (JIRA) <https://jira.mongodb.org/issues/?jql=project%20%3D%20SERVER%20AND%20fixVersion%20in%20(%222.5.0%22%2C%20%222.5.1%22%2C%20%222.5.2%22%2C%20%222.5.3%22%2C%20%222.5.4%22%2C%20%222.5.5%22%2C%20%222.6.0-rc1%22%2C%20%222.6.0-rc2%22%2C%20%222.6.0-rc3%22)%20AND%20%22Backwards%20Compatibility%22%20in%20(%20%22Minor%20Change%22%2C%22Major%20Change%22%20)%20ORDER%20BY%20votes%20DESC%2C%20issuetype%20DESC%2C%20key%20DESC>`_.
 
 Upgrade Process
 ~~~~~~~~~~~~~~~

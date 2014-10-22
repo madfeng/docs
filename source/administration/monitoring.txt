@@ -16,14 +16,7 @@ available in MongoDB. It also introduces diagnostic strategies
 and suggestions for monitoring replica sets and
 sharded clusters.
 
-.. note::
-
-   `MongoDB Management Service (MMS)
-   <https://mms.mongodb.com/?pk_campaign=mongodb-org&pk_kwd=monitoring>`_
-   is a hosted monitoring service which collects and aggregates data
-   to provide insight into the performance and operation of MongoDB
-   deployments. See the `MMS documentation
-   <http://mms.mongodb.com/help/>`_ for more information.
+.. include:: /includes/fact-mms-summary.rst
 
 Monitoring Strategies
 ---------------------
@@ -38,11 +31,10 @@ running MongoDB instance:
   statistics regarding the current database state with greater
   fidelity.
 
-- Third, `MMS Monitoring Service
-  <https://mms.mongodb.com/?pk_campaign=mongodb-org&pk_kwd=monitoring>`_
+- Third, :mms-home:`MMS Monitoring
+  </>`
   collects data from running MongoDB deployments and provides
-  visualization and alerts based on that data. MMS is a free service
-  provided by MongoDB.
+  visualization and alerts based on that data.
 
 Each strategy can help answer different questions and is useful in
 different contexts. These methods are complementary.
@@ -140,7 +132,7 @@ MongoDB performance.
 :dbcommand:`serverStatus` outputs an account of the state of a MongoDB
 instance. This command is rarely run directly. In most cases, the data
 is more meaningful when aggregated, as one would see with monitoring
-tools including `MMS <http://mms.mongodb.com>`_ .
+tools including :mms-home:`MMS </>`.
 Nevertheless, all administrators should be familiar with the data
 provided by :dbcommand:`serverStatus`.
 
@@ -265,9 +257,9 @@ query analyzing tool for MongoDB that compares MongoDB log files and
 indexes to make indexing recommendations.
 
 As part of `MongoDB Enterprise <http://www.mongodb.com/products/mongodb-enterprise>`_,
-you can run `MMS On-Prem <http://mms.mongodb.com>`_,
+you can run :mms-home:`MMS On-Prem </>`,
 which offers the features of MMS in a package that runs within your
-infrastructure.
+own infrastructure.
 
 Hosted (SaaS) Monitoring Tools
 ``````````````````````````````
@@ -282,10 +274,11 @@ a paid subscription.
 
      - **Notes**
 
-   * - `MongoDB Management Service <https://mms.mongodb.com/?pk_campaign=mongodb-org&pk_kwd=monitoring>`_
+   * - `MongoDB Management Service :mms-home:</>`
 
      - MMS is a cloud-based suite of services for managing MongoDB
-       deployments. MMS provides monitoring and backup functionality.
+       deployments. MMS provides monitoring, backup, and automation
+       functionality.
 
    * - `Scout <http://scoutapp.com>`_
 
@@ -302,6 +295,11 @@ a paid subscription.
        <http://www.serverdensity.com/mongodb-monitoring/>`_, MongoDB
        specific alerts, replication failover timeline and iPhone, iPad
        and Android mobile apps.
+
+   * - `Application Performance Management <http://ibmserviceengage.com>`_
+
+     - IBM has an Application Performance Management SaaS offering that
+       includes monitor for MongoDB and other applications and middleware.
 
 .. _stdout:
 .. _standard-output:
@@ -429,15 +427,21 @@ affect performance.
 Page Faults
 ~~~~~~~~~~~
 
-A page fault occurs when MongoDB requires data
-not located in physical memory, and must read from virtual memory. To
-check for page faults, see the :data:`extra_info.page_faults
-<serverStatus.extra_info.page_faults>` value in the
-:dbcommand:`serverStatus` output. This data is only available on
-Linux systems.
+.. include:: /includes/fact-page-fault.rst
 
-.. we should reverify the previous statement as the info is appearing
-   on OS X as well
+Page faults triggered by MongoDB are reported as the total number of page
+faults in one second. To check for page faults, see the
+:data:`extra_info.page_faults <serverStatus.extra_info.page_faults>` value
+in the :dbcommand:`serverStatus` output.
+
+MongoDB on Windows counts both hard and soft page faults.
+
+The MongoDB page fault counter may increase dramatically in moments of
+poor performance and may correlate with limited physical memory
+environments. Page faults also can increase while accessing much larger
+data sets, for example, scanning an entire collection. Limited and
+sporadic MongoDB page faults do not necessarily indicate a problem or a
+need to tune the database.
 
 A single page fault completes quickly and is not problematic. However, in
 aggregate, large volumes of page faults typically indicate that MongoDB
@@ -447,11 +451,12 @@ read and avoid blocking while waiting for the next page to read into
 memory. This approach improves concurrency, and also improves overall
 throughput in high volume systems.
 
-Increasing the amount of RAM accessible to MongoDB may
-help reduce the number of page faults. If this is not possible, you
-may want to consider deploying a :term:`sharded cluster` and/or
-adding :term:`shards <shard>` to your deployment to
-distribute load among :program:`mongod` instances.
+Increasing the amount of RAM accessible to MongoDB may help reduce the
+frequency of page faults. If this is not possible, you may want to consider
+deploying a :term:`sharded cluster` or adding :term:`shards <shard>`
+to your deployment to distribute load among :program:`mongod` instances.
+
+See :ref:`faq-storage-page-faults` for more information.
 
 Number of Connections
 ~~~~~~~~~~~~~~~~~~~~~
@@ -625,7 +630,7 @@ the following helper in the shell:
 
    rs.status()
 
-The :doc:`/reference/command/replSetGetStatus` document provides a more in-depth
+The :dbcommand:`replSetGetStatus` reference provides a more in-depth
 overview view of this output. In general, watch the value of
 :data:`~replSetGetStatus.members.optimeDate`, and pay particular attention
 to the time difference between the :term:`primary` and the
@@ -659,7 +664,8 @@ the availability of a sharded cluster, you should monitor your
 configuration servers to ensure that the cluster remains well
 balanced and that :program:`mongos` instances can restart.
 
-`MMS Monitoring <http://mms.mongodb.com>`_ monitors config servers and
+:mms-home:`MMS </>` monitors config
+servers and
 can create notifications if a config server becomes inaccessible.
 
 Balancing and Chunk Distribution

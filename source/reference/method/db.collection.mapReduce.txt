@@ -67,16 +67,27 @@ db.collection.mapReduce()
 
 .. include:: /includes/examples-map-reduce.rst
 
-For more information and examples, see the
-:doc:`Map-Reduce </core/map-reduce>` page and
-:doc:`/tutorial/perform-incremental-map-reduce`.
+Output
+------
 
-.. seealso::
+The output of the :method:`db.collection.mapReduce()` method is
+identical to that of the :dbcommand:`mapReduce` command. See the
+:ref:`Output <mapReduce-output>` section of the :dbcommand:`mapReduce`
+command for information on the :method:`db.collection.mapReduce()`
+output.
 
-   - :doc:`/tutorial/troubleshoot-map-function`
+Additional Information
+----------------------
 
-   - :doc:`/tutorial/troubleshoot-reduce-function`
+- :doc:`/tutorial/troubleshoot-map-function`
 
-   - :dbcommand:`mapReduce` command
+- :doc:`/tutorial/troubleshoot-reduce-function`
 
-   - :doc:`/core/aggregation`
+- :dbcommand:`mapReduce` command
+
+- :doc:`/core/aggregation`
+
+- :doc:`Map-Reduce </core/map-reduce>`
+
+- :doc:`/tutorial/perform-incremental-map-reduce`
+

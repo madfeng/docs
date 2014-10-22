@@ -121,7 +121,6 @@ SSL Options
 
 .. include:: /includes/option/option-mongos-sslFIPSMode.rst
 
-
 Audit Options
 ~~~~~~~~~~~~~
 

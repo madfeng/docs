@@ -25,7 +25,7 @@ Default Write Concern
 ~~~~~~~~~~~~~~~~~~~~~
 
 The :program:`mongo` shell and the MongoDB drivers use
-:ref:`write-concern-acknowledged` as the default write concern. 
+:ref:`write-concern-acknowledged` as the default write concern.
 
 See :ref:`write-concern-acknowledged` for more information, including
 when this write concern became the default.
@@ -34,6 +34,18 @@ Read Isolation
 ~~~~~~~~~~~~~~
 
 .. include:: /includes/fact-write-concern-read-uncommitted.rst
+
+Timeouts
+~~~~~~~~
+
+Clients can set a :ref:`wtimeout <wc-wtimeout>` value as part of a
+:ref:`replica acknowledged <replica-set-write-concern>` write
+concern. If the write concern is not satisfied in the specified
+interval, the operation returns an error, even if the write concern
+will eventually succeed.
+
+MongoDB does not "rollback" or undo modifications made before the
+``wtimeout`` interval expired.
 
 Write Concern Levels
 --------------------
@@ -63,9 +75,9 @@ Acknowledged
 ~~~~~~~~~~~~
 
 With a receipt *acknowledged* write concern, the :program:`mongod`
-confirms the receipt of the write operation. *Acknowledged* write
-concern allows clients to catch network, duplicate key, and other
-errors.
+confirms that it received the write operation and applied the change
+to the in-memory view of data. *Acknowledged* write concern allows
+clients to catch network, duplicate key, and other errors.
 
 MongoDB uses the *acknowledged* write concern by default starting in
 the driver releases outlined in :ref:`write-concern-change-releases`.
@@ -77,6 +89,9 @@ the driver releases outlined in :ref:`write-concern-change-releases`.
    script. See :ref:`write-methods-incompatibility` for details.
 
 .. include:: /images/crud-write-concern-ack.rst
+
+*Acknowledged* write concern does *not* confirm that the write
+operation has persisted to the disk system.
 
 .. _write-concern-replica-journaled:
 

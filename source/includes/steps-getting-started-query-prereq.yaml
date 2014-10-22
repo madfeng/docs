@@ -3,44 +3,89 @@ stepnum: 1
 pre: |
   To ensure that you are in the ``test`` database, issue the following in
   :program:`mongo` shell.
-ref: ""
+ref: switch-database
 action:
   language: javascript
   code: |
      use test
 ---
-title: Optional. Insert data into the collection.
+title: Drop the collection.
 stepnum: 2
-ref: ""
+ref: drop-collection
 pre: |
-  The queries in this section use the ``orders`` collection from the
-  :doc:`/insert`. If you have not inserted data into the
-  ``orders`` collection as outlined in :doc:`/insert`, you can insert
-  the documents now with the following insert operation.
+  Drop the ``inventory`` collection to ensure you start with a new
+  collection.
 action:
   language: javascript
   code: |
-    db.orders.insert(
-      [
-        { cust_id: "abc123", ord_date: ISODate("2014-04-01T04:00:00Z"), status: "A", items: [ { sku: "xxx", qty: 25, price: 1 }, { sku: "yyy", qty: 25, price: 1 } ], shipping: { location: "Warehouse1", mode: "airfreight" } },
-        { cust_id: "stu523", ord_date: ISODate("2014-04-22T04:00:00Z"), status: "A", items: [ { sku: "xyz", qty: 5, price: 10 } ], shipping: { location: "Warehouse1", mode: "airfreight" } },
-        { cust_id: "ijk021", ord_date: ISODate("2014-04-15T04:00:00Z"), status: "A", items: [ { sku: "wxy", qty: 10, price: 15 }, { sku: "xyz", qty: 5, price: 10 } ], shipping: { location: "Warehouse1", mode: "airfreight" } },
-        { cust_id: "abc123", ord_date: ISODate("2014-04-15T04:00:00Z"), status: "A", items: [ { sku: "yyy", qty: 15, price: 20 } ], shipping: { location: "Warehouse2", mode: "airfreight" } },
-        { cust_id: "ijk021", ord_date: ISODate("2014-04-27T04:00:00Z"), status: "A", items: [ { sku: "zzz", qty: 20, price: 25 }, { sku: "yyy", qty: 15, price: 20 } ], shipping: { location: "Warehouse2", mode: "train" } },
-        { cust_id: "abc123", ord_date: ISODate("2014-04-08T04:00:00Z"), status: "A", items: [ { sku: "yyy", qty: 25, price: 30 } ], shipping: { location: "Warehouse3", mode: "airfreight" } },
-        { cust_id: "abc123", ord_date: ISODate("2014-04-15T04:00:00Z"), status: "A", items: [ { sku: "qqq", qty: 10, price: 10 } ], shipping: { location: "Warehouse3", mode: "airfreight" } },
-        { cust_id: "abc123", ord_date: ISODate("2014-04-15T04:00:00Z"), status: "A", items: [ { sku: "yyy", qty: 10, price: 10 } ], shipping: { location: "Warehouse3", mode: "airfreight" } },
-        { cust_id: "abc123", ord_date: ISODate("2014-04-15T04:00:00Z"), status: "A", items: [ { sku: "zzz", qty: 10, price: 10 } ], shipping: { location: "Warehouse3", mode: "airfreight" } },
-        { cust_id: "xyz321", ord_date: ISODate("2014-04-15T04:00:00Z"), status: "A", items: [ { sku: "qqq", qty: 10, price: 10 } ], shipping: { location: "Warehouse3", mode: "airfreight" } },
-        { cust_id: "xyz321", ord_date: ISODate("2014-04-15T04:00:00Z"), status: "A", items: [ { sku: "yyy", qty: 10, price: 10 } ], shipping: { location: "Warehouse3", mode: "airfreight" } },
-        { cust_id: "xyz321", ord_date: ISODate("2014-04-15T04:00:00Z"), status: "A", items: [ { sku: "zzz", qty: 10, price: 10 } ], shipping: { location: "Warehouse3", mode: "airfreight" } },
-        { cust_id: "ijk021", ord_date: ISODate("2014-04-15T04:00:00Z"), status: "A", items: [ { sku: "qqq", qty: 10, price: 10 } ], shipping: { location: "Warehouse3", mode: "airfreight" } },
-        { cust_id: "ijk021", ord_date: ISODate("2014-04-15T04:00:00Z"), status: "A", items: [ { sku: "yyy", qty: 10, price: 10 } ], shipping: { location: "Warehouse3", mode: "airfreight" } },
-        { cust_id: "ijk021", ord_date: ISODate("2014-04-15T04:00:00Z"), status: "A", items: [ { sku: "zzz", qty: 10, price: 10 } ], shipping: { location: "Warehouse3", mode: "airfreight" } }
+    db.inventory.drop()
+post: |
+  The operation returns ``true`` if the operation drops the collection.
+  If the collection does not exist, the operation will return ``false``.
+---
+title: Insert documents into the collection.
+stepnum: 3
+ref: ""
+pre: "Insert documents into the ``inventory`` collection."
+action:
+  language: javascript
+  code: |
+    db.inventory.insert(
+       [
+         {
+            "_id" : ObjectId("53f768b390a2eb8e072cc4dc"),
+            "item" : "ABC",
+            "category" : "gloves",
+            "details" : { "model" : "14Q2", "color" : "brown" },
+            "stock" : [
+               { "size" : "S", "qty" : 25 },
+               { "size" : "M", "qty" : 50 }
+            ]
+         },
+         {
+            "_id" : ObjectId("53f7694390a2eb8e072cc4dd"),
+            "item" : "DEF",
+            "category" : "gloves",
+            "details" : { "model" : "14Q3", "color" : "red" },
+            "stock" : [
+               { "size" : "M", "qty" : 50 }
+            ]
+         },
+         {
+            "_id" : ObjectId("53f7694390a2eb8e072cc4de"),
+            "item" : "IJK",
+            "category" : "hat",
+            "details" : { "model" : "14Q2", "color" : "blue" },
+            "stock" : [
+               { "size" : "S", "qty" : 5 },
+               { "size" : "M", "qty" : 5 },
+               { "size" : "L", "qty" : 1 }
+            ]
+         },
+         {
+            "_id" : ObjectId("53f7694390a2eb8e072cc4df"),
+            "item" : "LMN",
+            "category" : "hat",
+            "details" : { "model" : "14Q2", "color" : "brown" },
+            "stock" : [
+               { "size" : "S", "qty" : 5 },
+               { "size" : "L", "qty" : 1 }
+            ]
+         },
+         {
+            "_id" : ObjectId("53f7694390a2eb8e072cc4e0"),
+            "item" : "PQR",
+            "category" : "gloves",
+            "details" : { "model" : "14Q3", "color" : "black" },
+            "stock" : [
+               { "size" : "S", "qty" : 5 },
+               { "size" : "L", "qty" : 1 }
+            ]
+         }
       ]
     )
 post: |
    Upon successful insert, the operation should return a
-   :method:`BulkWriteResult` that contains ``15`` in the
+   :method:`BulkWriteResult()` that contains ``5`` in the
    :data:`~BulkWriteResult.nInserted` field.
 ...

@@ -13,7 +13,7 @@ Master Slave Replication
 In addition to providing all the functionality of master-slave
 deployments, replica sets are also more robust for production use.
 Master-slave replication preceded replica sets
-and made it possible have a large number of non-master (i.e. slave) nodes, as well as
+and made it possible to have a large number of non-master (i.e. slave) nodes, as well as
 to restrict replicated operations to only a single database; however,
 master-slave replication provides less redundancy and does not
 automate failover. See :ref:`replica-set-equivalent` for a replica set
@@ -111,7 +111,7 @@ with a master if:
 - The slave stops (i.e. shuts down) and restarts later after the
   master has overwritten the relevant operations from the master.
 
-When slaves, are out of sync, replication stops. Administrators must
+When slaves are out of sync, replication stops. Administrators must
 intervene manually to restart replication. Use the :dbcommand:`resync`
 command. Alternatively, the :option:`--autoresync <mongod --autoresync>`
 allows a slave to restart replication automatically,
@@ -146,6 +146,11 @@ perspective of the master:
 
    rs.printReplicationInfo()
 
+.. versionadded:: 2.6
+
+   :method:`rs.printReplicationInfo()`. For previous versions, use
+   :method:`db.printReplicationInfo()`.
+
 On a :term:`slave` instance, use the following operation in the
 :program:`mongo` shell to return the replication status from the
 perspective of the slave:
@@ -153,6 +158,11 @@ perspective of the slave:
 .. code-block:: javascript
 
    rs.printSlaveReplicationInfo()
+
+.. versionadded:: 2.6
+
+   :method:`rs.printSlaveReplicationInfo()`. For previous versions, use
+   :method:`db.printSlaveReplicationInfo()`.
 
 Use the :dbcommand:`serverStatus` as in the following operation, to
 return status of the replication:
@@ -240,7 +250,7 @@ Convert a Master-Slave Deployment to a Replica Set
 
 To convert a master-slave deployment to a replica set, restart the
 current master as a one-member replica set. Then remove the data
-directors from previous secondaries and add them as new secondaries to
+directories from previous secondaries and add them as new secondaries to
 the new replica set.
 
 1. To confirm that the current instance is master, run:

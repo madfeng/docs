@@ -4,7 +4,6 @@
 #
 program: _shared
 name: help
-aliases: -h
 args: null
 directive: option
 description: |
@@ -28,7 +27,9 @@ args: null
 directive: option
 description: |
   Runs the {{program}} in a quiet mode that attempts to limit the amount
-  of output. This option suppresses:
+  of output.
+post: |
+  This option suppresses:
 
   - output from :term:`database commands <database command>`
 
@@ -59,12 +60,13 @@ description: |
   connect. By default, the {{program}} attempts to connect to a MongoDB
   instance running on the localhost on port number ``27017``.
 
-  To connect to a replica set, specify the replica set seed name and the
-  seed list of set members. Use the following format:
+  To connect to a replica set, specify the :setting:`replica set name
+  <~replication.replSetName>` and a seed list of set members. Use the
+  following form:
 
-  .. code-block:: javascript
+  .. code-block:: none
 
-     <replica_set_name>/<hostname1><:port>,<hostname2><:port>,...
+     <replSetName>/<hostname1><:port>,<hostname2><:port>,<...>
 
   You can always connect directly to a single MongoDB instance by
   specifying the host and port number directly.
@@ -119,6 +121,8 @@ description: |
 
   The default distribution of MongoDB does not contain support for SSL.
   For more information on MongoDB and SSL, see :doc:`/tutorial/configure-ssl`.
+
+  .. include:: /includes/warning-always-use-sslCAFile-for-mongo.rst
 optional: true
 ---
 program: _shared
@@ -234,18 +238,23 @@ description: |
   Specifies a password with which to authenticate to a MongoDB database
   that uses authentication. Use in conjunction with the ``--username`` and
   ``--authenticationDatabase`` options.
+  
+  If you do not specify an argument for {{role}}, {{program}} will
+  prompt interactively for a password on the console.
 optional: true
 ---
 program: _shared
 name: authenticationDatabase
 args: <dbname>
 directive: option
-description: |
+pre: | 
   .. versionadded:: 2.4
 
-  Specifies the database that holds the user's credentials. If you do not
-  specify an authentication database, the {{program}} assumes that the
-  database specified as the argument to the :option:`--db` option holds
+  Specifies the database that holds the user's credentials.   
+description: |
+  If you do not
+  specify an authentication database, {{program}} assumes that the
+  database specified as the argument to {{role}} holds
   the user's credentials.
 optional: true
 ---
@@ -345,5 +354,33 @@ args: <database>
 directive: option
 description: |
   Specifies the name of the database on which to run the {{program}}.
+optional: true
+---
+program: _shared
+name: gssapiServiceName
+args: null
+directive: option
+description: |
+  .. versionadded:: 2.6
+ 
+  Specify the name of the service using :doc:`GSSAPI/Kerberos
+  </core/kerberos>`. Only required if the service does not use the
+  default name of ``mongodb``.
+
+  This option is available only in MongoDB Enterprise.
+optional: true
+---
+program: _shared
+name: gssapiHostName
+args: null
+directive: option
+description: |
+  .. versionadded:: 2.6
+
+  Specify the hostname of a service using :doc:`GSSAPI/Kerberos
+  </core/kerberos>`. *Only* required if the hostname of a machine does
+  not match the hostname resolved by DNS.
+
+  This option is available only in MongoDB Enterprise.
 optional: true
 ...

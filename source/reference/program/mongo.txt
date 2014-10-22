@@ -78,6 +78,10 @@ Authentication Options
 
 .. include:: /includes/option/option-mongo-authenticationMechanism.rst
 
+.. include:: /includes/option/option-mongo-gssapiHostName.rst
+
+.. include:: /includes/option/option-mongo-gssapiServiceName.rst
+
 SSL Options
 ~~~~~~~~~~~
 

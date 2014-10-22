@@ -18,6 +18,38 @@ Minor Releases
 
       /release-notes/2.4-changelog
 
+2.4.12 -- October 16, 2014
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+- Partially written journal last section causes recovery to fail :issue:`SERVER-15111`.
+
+- Explicitly zero ``.ns`` files on creation :issue:`SERVER-15369`.
+
+- :ref:`2.4.12 Changelog <2.4.12-changelog>`.
+
+- `All 2.4.12 improvements <https://jira.mongodb.org/issues/?jql=fixVersion%20%3D%20%222.4.12%22%20AND%20project%20%3D%20SERVER>`_.
+
+
+
+2.4.11 -- August 18, 2014
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+- Fixed potential information leak: :issue:`SERVER-14268`.
+
+- Resolved issue were an ``_id`` with a ``$prefix`` field caused
+  replication failure due to unvalidated insert :issue:`SERVER-12209`.
+
+- Addressed issue where updates to documents with text-indexed fields
+  could lead to incorrect entries :issue:`SERVER-14738`.
+
+- Resolved issue where creating descending index on ``_id`` could
+  corrupt namespace :issue:`SERVER-14833`.
+
+- :ref:`2.4.11 Changelog <2.4.11-changelog>`.
+
+- `All 2.4.11 improvements <https://jira.mongodb.org/issues/?jql=fixVersion%20%3D%20%222.4.11%22%20AND%20project%20%3D%20SERVER>`_.
+
+
 2.4.10 -- April 4, 2014
 ~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -240,8 +272,8 @@ Security Enhancements
 ---------------------
 
 - Introduce a role-based access control system
-  :v2.4:`/reference/user-privileges` using new
-  :doc:`/reference/privilege-documents`.
+  :v2.4:`User Privileges </reference/user-privileges>` now use a new
+  format for :doc:`Privilege Documents </reference/privilege-documents>`.
 
 - Enforce uniqueness of the user in user privilege documents per
   database. Previous versions of MongoDB did not enforce this
@@ -338,7 +370,7 @@ In 2.4.4, MongoDB Enterprise uses Cyrus SASL. Earlier 2.4 Enterprise
 versions use GNU SASL (``libgsasl``). To upgrade to 2.4.4 MongoDB
 Enterprise or greater, you **must** install all package dependencies
 related to this change, including the appropriate Cyrus SASL ``GSSAPI``
-library. See :doc:`/tutorial/install-mongodb-enterprise` for details of
+library. See :doc:`/administration/install-mongodb-enterprise` for details of
 the dependencies.
 
 .. _kerberos-authentication:
@@ -383,5 +415,5 @@ Other Resources
 
 - `MongoDB Downloads <http://mongodb.org/downloads>`_.
 - `All JIRA issues resolved in 2.4 <https://jira.mongodb.org/secure/IssueNavigator.jspa?reset=true&jqlQuery=project+%3D+SERVER+AND+fixVersion+in+%28%222.3.2%22,+%222.3.1%22,+%222.3.0%22,+%222.4.0-rc0%22,+%222.4.0-rc1%22,+%222.4.0-rc2%22,+%222.4.0-rc3%22%29>`_.
-- `All Backwards incompatible changes <https://jira.mongodb.org/issues/?jql=project%20%3D%20SERVER%20AND%20fixVersion%20in%20(%222.3.2%22%2C%20%222.3.1%22%2C%20%222.3.0%22%2C%20%222.4.0-rc0%22%2C%20%222.4.0-rc1%22%2C%20%222.4.0-rc2%22%2C%20%222.4.0-rc3%22)%20AND%20%22Backwards%20Compatibility%22%20in%20%20(%22Major%20Change%22%2C%20%22Minor%20Change%22)%20ORDER%20BY%20votes%20DESC%2C%20issuetype%20DESC%2C%20key%20DESC>`_.
+- `All Backwards incompatible changes <https://jira.mongodb.org/issues/?jql=project%20%3D%20SERVER%20AND%20fixVersion%20in%20(%222.3.2%22%2C%20%222.3.1%22%2C%20%222.3.0%22%2C%20%222.4.0-rc0%22%2C%20%222.4.0-rc1%22%2C%20%222.4.0-rc2%22%2C%20%222.4.0-rc3%22)%20AND%20%22Backwards%20Compatibility%22%20in%20(%22Major%20Change%22%2C%22Minor%20Change%22%20)%20ORDER%20BY%20votes%20DESC%2C%20issuetype%20DESC%2C%20key%20DESC>`_.
 - `All Third Party License Notices <https://github.com/mongodb/mongo/blob/v2.4/distsrc/THIRD-PARTY-NOTICES>`_.

@@ -51,7 +51,22 @@ name: roles
 type: array
 position: 4
 description: |
-  The roles granted to the user.
+  The roles granted to the user. Can specify an empty array ``[]`` to
+  create users without roles.
+---
+object:
+  name: createUser
+  type: dbcommand
+field:
+  optional: true
+  type: field
+name: digestPassword
+type: boolean
+position: 5
+description: |
+  When ``true``, the :program:`mongod` instance will create the hash of the
+  user password; otherwise, the client is responsible for creating the hash
+  of the password. Defaults to ``true``.
 ---
 object:
   name: createUser
@@ -61,7 +76,7 @@ field:
   type: field
 name: writeConcern
 type: document
-position: 5
+position: 6
 description: |
   The level of :doc:`write concern </reference/write-concern>` for the
   creation operation. The ``writeConcern`` document takes the same

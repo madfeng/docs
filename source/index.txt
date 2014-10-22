@@ -97,10 +97,7 @@ The following resources provide additional information:
 
    `MongoDB Events <http://www.mongodb.com/events/>`_
       Upcoming events where you can learn more and meet members of the
-      MongoDB community. `MongoDB World
-      <http://world.mongodb.com/?utm_source=docs&utm_medium=org&utm_campaign=MongoDB-World&utm_content=Additional-Resources&utm_term=>`_
-      MongoDB World is the annual user conference, held in New York
-      City on June 23-25 2014.
+      MongoDB community.
 
    `Planet MongoDB <http://planet.mongodb.org/>`_
       Aggregator of popular MongoDB blogs.
@@ -108,13 +105,15 @@ The following resources provide additional information:
    `Slides and Video <http://www.mongodb.com/presentations/>`_
       Presentations and videos from past MongoDB events.
 
-   `MongoDB Management Service <http://mms.mongodb.com/>`_
+   :mms-home:`MongoDB Management Service </>`
       Free cloud-based service for monitoring and backing up MongoDB deployments. Also
-      consider the `MMS documentation <http://mms.mongodb.com/help/>`_.
+      consider the :mms:`MMS documentation </>`.
 
-   `MongoDB Books <http://mongodb.org/books>`_
-      Books that provide additional information and background on
-      MongoDB.
+   `MongoDB Training <http://university.mongodb.com>`_      
+      MongoDB's professional training offerings. Free online courses, online
+      certification, in-person training, and private courses for your
+      organization are available to help you learn to build, run, and deploy
+      applications with MongoDB.
 
    `MongoDB Ecosystem <http://docs.mongodb.org/ecosystem/>`_
       The documentation available for the drivers, frameworks, tools,

@@ -8,13 +8,22 @@ Overview
 --------
 
 Use this tutorial to install MongoDB Enterprise on Red Hat Enterprise
-Linux or CentOS Linux. The tutorial uses ``.rpm`` packages to install.
-
+Linux or CentOS Linux from ``.rpm`` packages.
 
 .. The following include includes two h2 headers:
 .. Packages and Control Scripts
 
 .. include:: /includes/list-mongodb-enterprise-packages.rst
+
+Considerations
+--------------
+
+MongoDB only provides Enterprise packages for Red Hat
+Enterprise Linux and CentOS Linux versions 5 and 6, 64-bit.
+
+.. include:: /includes/fact-installation-bind-ip-default-in-config.rst
+
+.. include:: /includes/note-package-change.rst
 
 Install MongoDB Enterprise
 --------------------------
@@ -27,5 +36,13 @@ how to do both.
 
 Run MongoDB Enterprise
 ----------------------
+.. important::
+
+   .. include:: /includes/fact-selinux-redhat-options.rst
+
+.. |mongod-user| replace:: ``mongod``
+.. |mongod-datadir| replace:: ``/var/lib/mongo``
+
+.. include:: /includes/fact-installation-directories.rst
 
 .. include:: /includes/steps/run-mongodb-on-a-linux-distribution.rst

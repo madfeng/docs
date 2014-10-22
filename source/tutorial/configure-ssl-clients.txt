@@ -12,9 +12,9 @@ versions of the Python, Java, Ruby, Node.js, .NET, and C++ drivers have
 support for SSL, with full support coming in future releases of other
 drivers.
 
-.. _mongo-shell-ssl-connect:
-
 .. seealso:: :doc:`/tutorial/configure-ssl`.
+
+.. _mongo-shell-ssl-connect:
 
 ``mongo`` Shell SSL Configuration
 ---------------------------------
@@ -29,7 +29,9 @@ SSL support or distributed with MongoDB Enterprise. To support SSL,
   :file:`.pem` file that contains the SSL certificate and key.
 
 - :option:`--sslCAFile` with the name of the :file:`.pem`
-  file that contains the certificate from the Certificate Authority.
+  file that contains the certificate from the Certificate Authority (CA).
+
+  .. include:: /includes/warning-always-use-sslCAFile-for-mongo.rst
 
 - :option:`--sslPEMKeyPassword` option if the
   client certificate-key file is encrypted.
@@ -52,8 +54,8 @@ Connect to MongoDB Instance that Requires Client Certificates
 To connect to a :program:`mongod` or :program:`mongos` that requires
 :ref:`CA-signed client certificates
 <ssl-mongod-ca-signed-ssl-cert-key>`, start the :program:`mongo` shell with
-:option:`--ssl <mongo --ssl>` and the :setting:`--sslPEMKeyFile
-<sslPEMKeyFile>` option to specify the signed certificate-key file, as
+:option:`--ssl <mongo --ssl>` and the :option:`--sslPEMKeyFile
+<mongo --sslPEMKeyFile>` option to specify the signed certificate-key file, as
 in the following:
 
 .. code-block:: sh
@@ -85,15 +87,15 @@ connect to that :program:`mongod`:
 MMS Monitoring Agent
 --------------------
 
-The Monitoring agent will also have to connect via SSL in order to gather its
-stats.  Because the agent already utilizes SSL for its communications
+The MMS Monitoring agent will also have to connect via SSL in order to gather its
+statistics.  Because the agent already utilizes SSL for its communications
 to the MMS servers, this is just a matter of enabling SSL support in
 MMS itself on a per host basis.
 
 Use the "Edit" host button (i.e. the pencil) on the Hosts page in the
 MMS console to enable SSL.
 
-Please see the `MMS documentation <http://mms.mongodb.com/help>`_ for more
+Please see the :mms:`MMS documentation </>` for more
 information about MMS configuration.
 
 PyMongo
